@@ -5,8 +5,9 @@ const editForm = document.querySelector("#editForm")
 
 const heads = ["name", "age", "mobile", "status"]
 
-const readFromStorage = (key = `tasks`) => JSON.parse(localStorage.getItem(key)) || []
-const writeToStorage = (data, key = `tasks`) => localStorage.setItem(key, JSON.stringify(data))
+const readFromStorage = (key = `users`) => JSON.parse(localStorage.getItem(key)) || []
+const writeToStorage = (data, key = `users`) => localStorage.setItem(key, JSON.stringify(data))
+
 
 const userObjCreator = (myForm) => {
     const user = { id: Date.now() }
@@ -88,10 +89,12 @@ if (editForm) {
     editForm.status.value = allUsers[index].status;
     editForm.addEventListener("submit", function (e) {
         e.preventDefault()
-        // const user = userObjCreator(editForm)
-        // addUser(user)
+        allUsers[index].name= editForm.name.value
+        allUsers[index].age= editForm.age.value
+        allUsers[index].mobile= editForm.mobile.value
+        allUsers[index].status= editForm.status.value
+        writeToStorage(allUsers, "users")
         window.location = "index.html"
-        console.log(document.querySelector("#id"));
     })
 
 }
