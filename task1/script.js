@@ -20,6 +20,20 @@ const addUser = (user) => {
     allUsers.push(user)
     writeToStorage(allUsers, "users")
 }
+const changStatus = (btn , allUsers , i ) => {
+if (allUsers[i].status == "active"){
+btn.classList ="mx-2 btn btn-dark";
+btn.innerHTML="inactive"
+allUsers[i].status = "inactive";
+writeToStorage(allUsers, "users");
+}else {
+    btn.classList ="mx-2 btn btn-success";
+    btn.innerHTML="active"
+    allUsers[i].status = "active";
+    writeToStorage(allUsers, "users");
+}
+
+}
 
 function createMyOwnElement(ele, parent, txt = null, classes = null, id = null) {
     const myElement = document.createElement(ele)
@@ -52,9 +66,10 @@ const drawData = () => {
         createMyOwnElement("td", tr, user.name, " nam")
         createMyOwnElement("td", tr, user.mobile, "mob")
         createMyOwnElement("td", tr, user.age, "age")
-        createMyOwnElement("td", tr, user.status, "stat")
+        const tdStat = createMyOwnElement("td", tr,null ,"stat")
+        const statbtn = createMyOwnElement("button", tdStat, user.status, "mx-2 btn btn-success")
+        statbtn.addEventListener("click", () => changStatus(statbtn ,allUsers ,i))
         const td = createMyOwnElement("td", tr)
-
         const delBtn = createMyOwnElement("button", td, "Delete", "mx-2 btn btn-danger")
         delBtn.addEventListener("click", (e) => deleteMyElement(allUsers, i))
         const showBtn = createMyOwnElement("button", td, "Show", "mx-2 btn btn-primary")
@@ -89,10 +104,10 @@ if (editForm) {
     editForm.status.value = allUsers[index].status;
     editForm.addEventListener("submit", function (e) {
         e.preventDefault()
-        allUsers[index].name= editForm.name.value
-        allUsers[index].age= editForm.age.value
-        allUsers[index].mobile= editForm.mobile.value
-        allUsers[index].status= editForm.status.value
+        allUsers[index].name = editForm.name.value
+        allUsers[index].age = editForm.age.value
+        allUsers[index].mobile = editForm.mobile.value
+        allUsers[index].status = editForm.status.value
         writeToStorage(allUsers, "users")
         window.location = "index.html"
     })
