@@ -1,18 +1,18 @@
 {{>header}}
 {{>nav}}
 <section class="container my-5">
-    <div class="d-flex justify-content-between">
-        <a href="/add" class="btn btn-primary mx-3">Add</a>
-            <div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <a class="btn btn-outline-secondary" href="/searchLogic" type="button">Search</a>
-  </div>
-  <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
-</div>
-                    <a href="/deleteAllLogic" class="btn btn-danger mx-3">Delete all</a>
+    <div class="d-flex justify-content-between mb-4">
+        <a href="/add" class="btn btn-primary">Add</a>
+            <div class="input-group mx-5">
+                <div class="input-group-prepend">
+                    <a class="btn btn-outline-secondary" href="/searchLogic" type="button">Search</a>
+                </div>
+                <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+                </div>
+                    <a href="/delAllLogic" class="btn btn-danger text-nowrap">Delete all</a>
     </div>
     <table class="table table-light my-5">
-        <thead class="">
+        <thead class="fw-bold">
                 <tr class="text-center">
                     <td>Id</td>
                     <td>Title</td>
@@ -34,7 +34,8 @@
                 <td class="text-center">
                     <a href="/single/{{id}}" class="btn btn-primary mx-3">show</a>
                     <a href="/edit/{{id}}" class="btn btn-warning mx-3">edit</a>
-                    <a href="/delete/{{id}}" class="btn btn-danger mx-3">delete</a>
+                    <a href="/delLogic/{{id}}" class="btn btn-danger mx-3">delete</a>
+                    <a href="/activate/{{id}}" class="btn btn-success mx-3">activate</a>
                 </td>
             </tr>
             {{/each}}

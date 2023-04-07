@@ -1,5 +1,5 @@
 const fs = require("fs")
-class dealJsonFile {
+class dbJsonFile {
     static writeData = (fileName, data) => {
         fs.writeFileSync(fileName, JSON.stringify(data))
     }
@@ -16,4 +16,4 @@ class dealJsonFile {
         return result
     }
 }
-module.exports = dealJsonFile
+module.exports = dbJsonFile

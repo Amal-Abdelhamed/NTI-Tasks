@@ -5,9 +5,13 @@ const path = require("path")
 var favicon = require('serve-favicon')
 
 
-
-
 const app = express()
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.json());
+
+
 const viewDir = path.join(__dirname, "../resources/views")
 const parDir = path.join(__dirname, "../resources/layout")
 const staticDir = path.join(__dirname, "../resources/public")
