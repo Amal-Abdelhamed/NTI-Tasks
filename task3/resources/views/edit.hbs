@@ -2,7 +2,7 @@
 {{>nav}}
     <section class="container my-3">
       <h3>Edit task</h3>
-      <form action="/editLogic/{{user.id}}" method="post">
+      <form action="/editLogic/{{task.id}}">
   <div class="mb-3">
     <label class="form-label">Title</label>
     <input type="text" class="form-control" name="title" value ="{{task.title}}">
@@ -16,7 +16,7 @@
     <input type="date" class="form-control" name="dueDate" value ="{{task.dueDate}}">
   </div>
   
-  <button type="submit" class="btn btn-primary">Edit</button>
+            <button class="btn btn-primary">Edit</button>
 </form>
     </section>
 {{>footer}}

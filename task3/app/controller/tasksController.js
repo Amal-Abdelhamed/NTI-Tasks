@@ -32,8 +32,9 @@ class taskController {
     // delete task
     static delSingleLogic = (req, res) => {
         let allTasks = dbJson.readData(fileName)
-        const id = req.body.id
-        allTasks = allTasks.find(t => t.id != id)
+        const id = req.params.id
+        const i = allTasks.findIndex(t => t.id != id)
+        allTasks.splice(i, 1)
         dbJson.writeData(fileName, allTasks)
         res.redirect("/")
     }
@@ -46,25 +47,46 @@ class taskController {
         res.redirect("/")
     }
     // edit task
-    static edit = (req, res) => {
+    static editBtn = (req, res) => {
+        const id = req.params.id
         const allTasks = dbJson.readData(fileName)
-        const id = req.body.id
         const task = allTasks.find(t => t.id == id)
         res.render("edit",
-            { pageTitle: "edit page", task}
+            { pageTitle: "edit page", task }
         )
     }
     static editLogic = (req, res) => {
         const allTasks = dbJson.readData(fileName)
-        const id = req.body.id
-        const task = allTasks.find(t => t.id == id)
-        task.title = req.body.title;
-        task.content = req.body.content;
-        task.dueDate = req.body.dueDate;
-        task.status = req.body.status;
+        const id = req.params.id
+        const index = allTasks.findIndex(t => t.id == id)
+        allTasks[index] = { id, ...req.query }
         dbJson.writeData(fileName, allTasks)
         res.redirect("/")
     }
+// show single task
+static showBtn = (req, res) => {
+    const id = req.params.id
+    const allTasks = dbJson.readData(fileName)
+    const task = allTasks.find(t => t.id == id)
+    res.render("show",
+        { pageTitle: "show task details", task }
+    )
+
+}
+
+// activate status
+
+static active = (req, res) => {
+    const id = req.params.id
+    const allTasks = dbJson.readData(fileName)
+    const task = allTasks.find(t => t.id == id)
+    task.status = "true"
+    dbJson.writeData(fileName, allTasks)
+    res.redirect("/")
+}
+
+
+
 
 }
 
