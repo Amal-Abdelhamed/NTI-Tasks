@@ -1,6 +1,7 @@
 {
-  "name": "nti-tasks",
+  "name": "task3",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -8,10 +9,11 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "express-hbs": "^2.4.0"
+    "hbs": "^4.2.0",
+    "nodemon": "^2.0.22",
+    "serve-favicon": "^2.5.0"
   }
 }
