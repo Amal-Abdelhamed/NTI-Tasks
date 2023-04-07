@@ -3,12 +3,14 @@
 <section class="container my-5">
     <div class="d-flex justify-content-between mb-4">
         <a href="/add" class="btn btn-primary">Add</a>
+        <form action="/search" method="get">
             <div class="input-group mx-5">
                 <div class="input-group-prepend">
-                    <a class="btn btn-outline-secondary" href="/searchLogic" type="button">Search</a>
+  <button button="submit" class="btn btn-secondary">search</button>
                 </div>
-                <input type="text" class="form-control"  aria-describedby="basic-addon1">
+                <input type="text" class="form-control"  name="search" aria-describedby="basic-addon1" >
                 </div>
+        </form>
                     <a href="/delAllLogic" class="btn btn-danger text-nowrap">Delete all</a>
     </div>
     <table class="table table-light my-5">
@@ -23,6 +25,27 @@
                 </tr>
         </thead>
         <tbody>
+            {{#if searchResult}}
+            {{#each searchArr}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{title}}</td>
+                <td>{{content}}</td>
+                <td>{{dueDate}}</td>
+                <td>{{status}}</td>
+                <td class="text-center">
+                    <a href="/show/{{id}}" class="btn btn-primary mx-3">show</a>
+                    <a href="/edit/{{id}}" class="btn btn-warning mx-3">edit</a>
+                    <a href="/delSingleLogic/{{id}}" class="btn btn-danger mx-3">delete</a>
+                    <a href="/activate/{{id}}" class="btn btn-success mx-3">activate</a>
+
+                </td>
+            </tr>
+            {{/each}}
+            {{else}}
+{{!-- <tr class="table-danger">
+                <td colspan="6" class="text-center">Task not found</td> --}}
+            {{/if}}
             {{#if hasData}}
             {{#each allTasks}}
             <tr>

@@ -19,4 +19,6 @@ router.get("/show/:id", tasksController.showBtn)
 
 router.get("/activate/:id", tasksController.active)
 
+router.get("/search", tasksController.search)
+
 module.exports = router
