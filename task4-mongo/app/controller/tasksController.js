@@ -1,16 +1,24 @@
 const dbJson = require('../helper/dbJsonFile')
+const connectDb = require('../../models/dbConnect')
 const fileName = "models/tasks.json"
 
 class taskController {
 
     // render home page 
-    static allTasks = (req, res) => {
-        const allTasks = dbJson.readData(fileName)
-        res.render("allTasks", {
-            pageTitle: "home",
-            allTasks,
-            hasData: allTasks.length 
-        })
+    static allTasks = async(req,res)=>{
+        try{
+            connectDb(async(db)=>{
+                const allTasks = await db.collection("tasks").find().toArray()
+                res.render("allTasks", {
+                    pageTitle:"All Tasks", 
+                    allTasks,
+                    hasData: allTasks.length
+                })
+            })
+        }
+        catch(e){
+            res.send(e)
+        }
     }
 
     // add task
@@ -22,12 +30,17 @@ class taskController {
         )
     }
 
-    static addLogic = (req, res) => {
-        const allTasks = dbJson.readData(fileName)
-        const newTask = { id: Date.now(), ...req.body }
-        allTasks.push(newTask)
-        dbJson.writeData(fileName, allTasks)
-        res.redirect("/")
+    static addLogic = async (req, res) => {
+        try {
+            connectDb(async (db) => {
+           const task = await db.collection("tasks").insertOne(req.body)
+
+                res.redirect("/")
+            })
+        }
+        catch (e) {
+            res.send(e.message)
+        }
     }
     // delete task
     static delSingleLogic = (req, res) => {
@@ -36,7 +49,7 @@ class taskController {
         const i = allTasks.findIndex(t => t.id != id)
         allTasks.splice(i, 1)
         dbJson.writeData(fileName, allTasks)
-        res.redirect("/" )
+        res.redirect("/")
     }
 
     // delete all tasks
@@ -87,26 +100,22 @@ class taskController {
 
     // search for task
 
-    static search = (req, res) => {
-        const searchData = req.query.search
-        // let allTasks = dbJson.readData(fileName)
-        // let search = allTasks.find({title :{$regex:new RegExp(/^``$/)} })
-        
-        // const searchArr = allTasks.filter(task => task.title.include(searchData) || task.content.include(searchData))
-        // allTasks.forEach(task => {
-        //     const title =  task.title
-        //     const content=  task.content
-        //     var bufTitle = Buffer.from(title);
-        //     var bufContent = Buffer.from(content);
-        //     if( bufTitle.includes(searchData) || bufContent.includes(searchData)){
+    static search = async (req, res) => {
+        try {
+            const searchData = req.query.search
+            connectDb(async (db) => {
+           const task = await db.collection("tasks").find({$or:[{"title": { $regex: `/${searchData}/`,i }}, {"content": searchData}]}).toArray()
 
-        //     }
-        // });
-
-        // const searchArr = Buffer.from()
-        // res.render("allTasks", { searchArr ,searchResult: searchArr.length})
-        res.send(searchData)
+           res.send(task)
+            })
+        }
+        catch (e) {
+            res.send(e.message)
+        }
     }
+    
+    
+   
 
 
 

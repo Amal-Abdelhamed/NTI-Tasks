@@ -6,7 +6,7 @@
         <form action="/search" method="get">
             <div class="input-group mx-5">
                 <div class="input-group-prepend">
-  <button button="submit" class="btn btn-secondary">search</button>
+                <button button="submit" class="btn btn-secondary">search</button>
                 </div>
                 <input type="text" class="form-control"  name="search" aria-describedby="basic-addon1" >
                 </div>
@@ -58,9 +58,7 @@
                     <a href="/show/{{id}}" class="btn btn-primary mx-3">show</a>
                     <a href="/edit/{{id}}" class="btn btn-warning mx-3">edit</a>
                     <a href="/delSingleLogic/{{id}}" class="btn btn-danger mx-3">delete</a>
-                    {{#ifValue status equals }}
                     <a href="/activate/{{id}}" class="btn btn-success mx-3">activate</a>
-                   {{/if}}
 
                 </td>
             </tr>
