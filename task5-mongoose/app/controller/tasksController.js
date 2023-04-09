@@ -1,6 +1,5 @@
 const dbJson = require('../helper/dbJsonFile')
-const connectDb = require('../../models/dbConnect')
-const ObjectId = require("mongodb").ObjectId
+const taskModel = require("../../db/dbConnect")
 const fileName = "models/tasks.json"
 
 class taskController {
@@ -8,42 +7,36 @@ class taskController {
     // render home page 
     static allTasks = async (req, res) => {
         try {
-            connectDb(async (db) => {
-                const allTasks = await db.collection("tasks").find().toArray()
-                res.render("allTasks", {
-                    pageTitle: "All Tasks",
-                    allTasks,
-                    hasData: allTasks.length
-                })
-            })
-        }
-        catch (e) {
-            res.send(e)
-        }
-    }
-
-    // add task
-    static add = (req, res) => {
-        res.render("add",
-            {
-                pageTitle: "add page"
-            }
-        )
-    }
-
-    static addLogic = async (req, res) => {
-        try {
-            connectDb(async (db) => {
-                const task = await db.collection("tasks").insertOne(req.body)
-
-                res.redirect("/")
+            const allTasks = await taskModel.find()
+            res.render("allTasks", {
+                pageTitle: "All Data",
+                allTasks,
+                hasData: allTasks.length
             })
         }
         catch (e) {
             res.send(e.message)
         }
     }
+    // add task
+    static add = (req, res) => {
+        res.render("add",
+            {
+                pageTitle: "Add Task"
+            }
+        )
+    }
 
+    static addLogic = async (req, res) => {
+        try {
+            const data = new (req.body)
+            await data.save()
+            res.redirect("/")
+        }
+        catch (e) {
+            res.send(e)
+        }
+    }
     // delete task
 
     static delSingleLogic = async (req, res) => {
@@ -76,39 +69,25 @@ class taskController {
 
     static editBtn = async (req, res) => {
         try {
-            connectDb(async (db) => {
-                const task = await db.collection("tasks").findOne({
-                    _id: new ObjectId(req.params.id)
-                })
-                res.render("edit", {
-                    pageTitle: "Single Task",
-                    task
-                })
-
+            const task = await taskModel.findById(req.params.id)
+            res.render("edit", {
+                pageTitle: "Edit Data",
+                task
             })
         }
         catch (e) {
-            res.send(e)
+            res.send(e.message)
         }
     }
+
     static editLogic = async (req, res) => {
         try {
-            connectDb(async (db) => {
-                const task = await db.collection("tasks").updateOne(
-                    { _id: new ObjectId(req.params.id) },
-                    { $set: { ...req.query } }
-                    );
-                    const allTasks = await db.collection("tasks").find().toArray()
-                    res.render("allTasks", {
-                        pageTitle: "All Tasks",
-                        allTasks,
-                        hasData: allTasks.length
-                    })
-                
-            })
+            const id = req.params.id
+            await taskModel.findByIdAndUpdate(id, req.query, { runValidators: true })
+            res.redirect(`/single/${id}`)
         }
         catch (e) {
-            res.send(e)
+            res.send(e.message)
         }
     }
 
@@ -140,7 +119,7 @@ class taskController {
             connectDb(async (db) => {
                 const task = await db.collection("tasks").updateOne(
                     { _id: new ObjectId(req.params.id) },
-                    { $set: { ...req.query } }, {status:"true"}
+                    { $set: { ...req.query } }, { status: "true" }
                 );
                 res.send(task)
 
