@@ -1,7 +1,7 @@
-const dbJson = require('../helper/dbJsonFile')
+
 const connectDb = require('../../models/dbConnect')
 const ObjectId = require("mongodb").ObjectId
-const fileName = "models/tasks.json"
+
 
 class taskController {
 
@@ -98,13 +98,8 @@ class taskController {
                     { _id: new ObjectId(req.params.id) },
                     { $set: { ...req.query } }
                     );
-                    const allTasks = await db.collection("tasks").find().toArray()
-                    res.render("allTasks", {
-                        pageTitle: "All Tasks",
-                        allTasks,
-                        hasData: allTasks.length
-                    })
-                
+                    
+                res.redirect("/")
             })
         }
         catch (e) {

@@ -1,6 +1,5 @@
 const dbJson = require('../helper/dbJsonFile')
-const taskModel = require("../../db/dbConnect")
-const fileName = "models/tasks.json"
+const taskModel = require("../../db/models/task.model")
 
 class taskController {
 
@@ -9,7 +8,7 @@ class taskController {
         try {
             const allTasks = await taskModel.find()
             res.render("allTasks", {
-                pageTitle: "All Data",
+                pageTitle: "All Tasks",
                 allTasks,
                 hasData: allTasks.length
             })
@@ -29,33 +28,31 @@ class taskController {
 
     static addLogic = async (req, res) => {
         try {
-            const data = new (req.body)
+            const data = new taskModel(req.body)
             await data.save()
             res.redirect("/")
         }
         catch (e) {
-            res.send(e)
+            res.send(e.message)
         }
     }
     // delete task
 
     static delSingleLogic = async (req, res) => {
         try {
-            connectDb(async (db) =>
-                await db.collection("tasks")
-                    .deleteOne({ _id: new ObjectId(req.params.id) })
-            )
+            const d = await taskModel.findByIdAndRemove(req.params.id)
+            console.log(d)
             res.redirect("/")
         }
         catch (e) {
-            res.send(e)
+            res.send(e.message)
         }
     }
 
     // delete all tasks
     static delAllLogic = async (req, res) => {
         try {
-            connectDb(async (db) => await db.collection("tasks").remove())
+            await taskModel.deleteMany()
             res.redirect("/")
         }
         catch (e) {
@@ -84,7 +81,7 @@ class taskController {
         try {
             const id = req.params.id
             await taskModel.findByIdAndUpdate(id, req.query, { runValidators: true })
-            res.redirect(`/single/${id}`)
+            res.redirect("/")
         }
         catch (e) {
             res.send(e.message)
@@ -95,19 +92,14 @@ class taskController {
 
     static showBtn = async (req, res) => {
         try {
-            connectDb(async (db) => {
-                const task = await db.collection("tasks").findOne({
-                    _id: new ObjectId(req.params.id)
-                })
-                res.render("show", {
-                    pageTitle: "Show Single task",
-                    task
-                })
-
+            const task = await taskModel.findById(req.params.id)
+            res.render("show", {
+                pageTitle: "show Single task",
+                task
             })
         }
         catch (e) {
-            res.send(e)
+            res.send(e.message)
         }
     }
 
@@ -115,18 +107,16 @@ class taskController {
 
 
     static active = async (req, res) => {
+        console.log(req.params.id);
         try {
-            connectDb(async (db) => {
-                const task = await db.collection("tasks").updateOne(
-                    { _id: new ObjectId(req.params.id) },
-                    { $set: { ...req.query } }, { status: "true" }
-                );
-                res.send(task)
-
-            })
+            const task = await taskModel.updateOne(
+                { _id: req.params.id },
+                { $set: { status: "true" } }
+            );
+            res.redirect("/")
         }
         catch (e) {
-            res.send(e)
+            res.send(e.message)
         }
     }
 
@@ -135,16 +125,16 @@ class taskController {
     static search = async (req, res) => {
         try {
             const searchData = req.query.search
-            connectDb(async (db) => {
-                const tasks = await db.collection("tasks").find({ $or: [{ "title": { $regex: searchData, $options: "i" } }, { "content": { $regex: searchData, $options: "i" } }] }).toArray()
+            const allTasks = await taskModel.find({ $or: [{ "title": { $regex: searchData, $options: "i" } }, { "content": { $regex: searchData, $options: "i" } }] })
 
-                res.render("allTasks", {
-                    pageTitle: "search Tasks",
-                    allTasks: tasks,
-                    hasData: tasks.length
 
-                })
+            res.render("allTasks", {
+                pageTitle: "search Tasks",
+                allTasks,
+                hasData: allTasks.length
+
             })
+
         }
         catch (e) {
             res.send(e.message)

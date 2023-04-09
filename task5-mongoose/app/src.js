@@ -1,3 +1,4 @@
+require("../db/dbConnect")
 const taskRoutes = require("./route/task.routes")
 const express = require("express")
 const hbs = require("hbs")
