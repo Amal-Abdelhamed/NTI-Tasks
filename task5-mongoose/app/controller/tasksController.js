@@ -7,10 +7,19 @@ class taskController {
     static allTasks = async (req, res) => {
         try {
             const allTasks = await taskModel.find()
+
+            const data = allTasks.map((task) => {
+                const date = new Date(task?._doc?.dueDate).toDateString()
+                return {
+                    ...task?._doc,
+                    date,
+                    active: !task?.status
+                }
+            })
             res.render("allTasks", {
                 pageTitle: "All Tasks",
-                allTasks,
-                hasData: allTasks.length
+                allTasks: data,
+                hasData: data.length
             })
         }
         catch (e) {

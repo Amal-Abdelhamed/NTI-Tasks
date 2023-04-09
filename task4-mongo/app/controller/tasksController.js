@@ -10,10 +10,17 @@ class taskController {
         try {
             connectDb(async (db) => {
                 const allTasks = await db.collection("tasks").find().toArray()
+                const data = allTasks.map((task) => {
+                    return {
+                        ...task,
+                        active : task?.status == "true" ? false : true
+                    }
+                })
+                
                 res.render("allTasks", {
                     pageTitle: "All Tasks",
-                    allTasks,
-                    hasData: allTasks.length
+                    allTasks: data,
+                    hasData: data.length
                 })
             })
         }
@@ -135,9 +142,9 @@ class taskController {
             connectDb(async (db) => {
                 const task = await db.collection("tasks").updateOne(
                     { _id: new ObjectId(req.params.id) },
-                    { $set: { ...req.query } }, {status:"true"}
+                    { $set:  {status:"true"}}
                 );
-                res.send(task)
+                res.redirect("/")
 
             })
         }

@@ -37,8 +37,9 @@
                     <a href="/show/{{_id}}" class="btn btn-primary mx-3">show</a>
                     <a href="/edit/{{_id}}" class="btn btn-warning mx-3">edit</a>
                     <a href="/delSingleLogic/{{_id}}" class="btn btn-danger mx-3">delete</a>
+                   {{#if active}}
                     <a href="/activate/{{_id}}" class="btn btn-success mx-3">activate</a>
-
+                    {{/if}}
                 </td>
             </tr>
             {{/each}}
