@@ -6,67 +6,46 @@
         <form action="/search" method="get">
             <div class="input-group mx-5">
                 <div class="input-group-prepend">
-                <button button="submit" class="btn btn-secondary">search</button>
+                    <button button="submit" class="btn btn-secondary">search</button>
                 </div>
-                <input type="text" class="form-control"  name="search" aria-describedby="basic-addon1" >
-                </div>
+                <input type="text" class="form-control" name="search" aria-describedby="basic-addon1">
+            </div>
         </form>
-                    <a href="/delAllLogic" class="btn btn-danger text-nowrap">Delete all</a>
+        <a href="/delAllLogic" class="btn btn-danger text-nowrap">Delete all</a>
     </div>
     <table class="table table-light my-5">
         <thead class="fw-bold">
-                <tr class="text-center">
-                    <td>Id</td>
-                    <td>Title</td>
-                    <td>content</td>
-                    <td>Due date</td>
-                    <td>Status</td>
-                    <td>Action</td>
-                </tr>
+            <tr class="text-center">
+                <td>Id</td>
+                <td>Title</td>
+                <td>content</td>
+                <td>Due date</td>
+                <td>Status</td>
+                <td>Action</td>
+            </tr>
         </thead>
         <tbody>
-            {{#if searchResult}}
-            {{#each searchArr}}
-            <tr>
-                <td>{{id}}</td>
-                <td>{{title}}</td>
-                <td>{{content}}</td>
-                <td>{{dueDate}}</td>
-                <td>{{status}}</td>
-                <td class="text-center">
-                    <a href="/show/{{id}}" class="btn btn-primary mx-3">show</a>
-                    <a href="/edit/{{id}}" class="btn btn-warning mx-3">edit</a>
-                    <a href="/delSingleLogic/{{id}}" class="btn btn-danger mx-3">delete</a>
-                    <a href="/activate/{{id}}" class="btn btn-success mx-3">activate</a>
-
-                </td>
-            </tr>
-            {{/each}}
-            {{else}}
-{{!-- <tr class="table-danger">
-                <td colspan="6" class="text-center">Task not found</td> --}}
-            {{/if}}
             {{#if hasData}}
             {{#each allTasks}}
             <tr>
-                <td>{{id}}</td>
+                <td>{{_id}}</td>
                 <td>{{title}}</td>
                 <td>{{content}}</td>
                 <td>{{dueDate}}</td>
                 <td>{{status}}</td>
                 <td class="text-center">
-                    <a href="/show/{{id}}" class="btn btn-primary mx-3">show</a>
-                    <a href="/edit/{{id}}" class="btn btn-warning mx-3">edit</a>
-                    <a href="/delSingleLogic/{{id}}" class="btn btn-danger mx-3">delete</a>
-                    <a href="/activate/{{id}}" class="btn btn-success mx-3">activate</a>
+                    <a href="/show/{{_id}}" class="btn btn-primary mx-3">show</a>
+                    <a href="/edit/{{_id}}" class="btn btn-warning mx-3">edit</a>
+                    <a href="/delSingleLogic/{{_id}}" class="btn btn-danger mx-3">delete</a>
+                    <a href="/activate/{{_id}}" class="btn btn-success mx-3">activate</a>
 
                 </td>
             </tr>
             {{/each}}
             {{else}}
-<tr class="table-danger">
+            <tr class="table-danger">
                 <td colspan="6" class="text-center">No Tasks yet</td>
-            </tr>            {{/if}}
+            </tr> {{/if}}
         </tbody>
     </table>
 </section>
