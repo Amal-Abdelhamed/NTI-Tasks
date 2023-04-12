@@ -1,6 +1,4 @@
-const { model } = require("mongoose")
-
-const Course =()=>{
+class Course {
 
 }
-model.exports = Course
+module.exports= Course
